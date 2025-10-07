@@ -22,7 +22,8 @@ pipeline {
 
     stage('Docker Build') {
       steps {
-        sh 'docker build -t pipeline-demo:${BUILD_NUMBER} .'
+       echo 'Simulating Docker build...'
+
       }
     }
 
