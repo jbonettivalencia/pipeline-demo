@@ -1,45 +1,51 @@
 pipeline {
-  agent any
-  tools { jdk 'JDK17'; maven 'Maven3' }
+    agent any
 
-  stages {
-    stage('Checkout') {
-      steps { checkout scm }
+    tools {
+        jdk 'JDK17'
+        maven 'Maven3'
     }
 
-    stage('Build & Test') {
-      steps {
-        sh 'mvn -B clean verify'
-      }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/jbonettivalencia/pipeline-demo.git'
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                sh 'mvn -B clean verify'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'mvn -B package'
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                echo 'Simulating Docker build...'
+            }
+        }
+
+        stage('Smoke Test') {
+            steps {
+                echo 'Skipping Docker run (Docker not installed on Jenkins)'
+            }
+        }
     }
 
-    stage('Package') {
-      steps {
-        sh 'mvn -B package'
-        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-      }
-    }
-
-    stage('Docker Build') {
-      steps {
-       echo 'Simulating Docker build...'
-
-      }
-    }
-
-  stage('Smoke Test') {
-    steps {
-        echo 'Skipping Docker run (Docker not installed on Jenkins)'
+    post {
+        always {
+            junit 'target/surefire-reports/*.xml'
+        }
+        success {
+            echo ' CI/CD complete: built, tested, and containerized successfully!'
+        }
     }
 }
 
-
-  post {
-    always {
-      junit 'target/surefire-reports/*.xml'
-    }
-    success {
-      echo '✅ CI/CD complete: built, tested, and containerized successfully!'
-    }
-  }
-}
