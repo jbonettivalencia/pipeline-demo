@@ -1,11 +1,12 @@
 package com.example;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class UtilsTest {
+public class UtilsTest {
+
     @Test
-    void testsumAddsNumbers() {
-        assertEquals(5, com.example.Utils.sum(2, 3));
+    public void testSumAddsNumbers() {
+        assertEquals(5, Utils.sum(2, 3));
     }
 }
