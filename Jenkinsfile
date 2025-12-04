@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        // Add Maven path so Jenkins can find mvn
+        // Make sure Jenkins sees Maven
         PATH = "/opt/homebrew/bin:${env.PATH}"
 
         STAGING_PORT = "8081"
@@ -45,13 +45,13 @@ pipeline {
 
         stage('Load Test (STAGING)') {
             steps {
-                sh '''
-                  echo "Starting simple load test on STAGING..."
-                  for i in $(seq 1 50); do
-                    curl -s http://localhost:'"${STAGING_PORT}"'/ > /dev/null
-                  done
-                  echo "Load test finished."
-                '''
+                sh """
+                    echo "Starting simple load test on STAGING..."
+                    for i in \$(seq 1 50); do
+                        curl -s http://localhost:${STAGING_PORT}/ > /dev/null
+                    done
+                    echo "Load test finished."
+                """
             }
         }
 
@@ -88,4 +88,5 @@ pipeline {
         }
     }
 }
+
 
