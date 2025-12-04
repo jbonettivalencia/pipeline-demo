@@ -2,6 +2,9 @@ pipeline {
     agent any
 
     environment {
+        // Add Maven path so Jenkins can find mvn
+        PATH = "/opt/homebrew/bin:${env.PATH}"
+
         STAGING_PORT = "8081"
         PROD_PORT    = "8082"
     }
@@ -85,3 +88,4 @@ pipeline {
         }
     }
 }
+
